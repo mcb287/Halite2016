@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(filename='example.log',level=logging.INFO)
 logging.info('Start log ---------------------')
 myID, game_map = hlt.get_init()
-hlt.send_init("attack weakest")
+hlt.send_init("Attack best prodratio")
 
 def populate_lists(game_map):
     logging.info('****populate_lists****')
@@ -61,15 +61,6 @@ def get_direction(square_1, square_2):
             logging.info('Return NORTH')
             logging.info('********')
             return NORTH
-def get_weakest(square):
-    tmp_strength = 1000
-    tmp_idx = -1
-    for idx, n in enumerate(game_map.neighbors(square)):
-        if(n.production > 0):
-            if (n.strength < tmp_strength and n.owner != myID):
-                tmp_strength = n.strength
-                tmp_idx = idx
-    return tmp_idx, tmp_strength
 
 def get_prod_ratio(square):
     tmp_ratio = 1000
@@ -100,7 +91,7 @@ def kill_smallest_enemy(square, enemies, enemy_size, enemy_squares):
 
 def assign_move(square):
     wait = False
-    i, s = get_weakest(square)
+    i, s = get_prod_ratio(square)
     logging.info("i: " + str(i))
     logging.info("s: " + str(s))
     if(i != -1 and s < square.strength):

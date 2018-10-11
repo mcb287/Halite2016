@@ -5,8 +5,18 @@ import logging
 logging.basicConfig(filename='example.log',level=logging.ERROR)
 logging.info('Start log ---------------------')
 myID, game_map = hlt.get_init()
-hlt.send_init("Random Prodratio")
+hlt.send_init("Random Weakest")
 logging.error('1')
+
+def get_weakest(square):
+    tmp_strength = 1000
+    tmp_idx = -1
+    for idx, n in enumerate(game_map.neighbors(square)):
+        if(n.production > 0):
+            if (n.strength < tmp_strength and n.owner != myID):
+                tmp_strength = n.strength
+                tmp_idx = idx
+    return tmp_idx, tmp_strength
 
 def get_prod_ratio(square):
     tmp_ratio = 1000
@@ -23,7 +33,7 @@ def get_prod_ratio(square):
 def assign_move(square):
     n_str = ""
     wait = False
-    dir_, str_ = get_prod_ratio(square)
+    dir_, str_ = get_weakest(square)
     if(dir_ != -1 and square.strength > str_):
         return Move(square, dir_)
     elif(dir_ != -1 and square.strength < str_):
